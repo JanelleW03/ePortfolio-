@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16233A;
+    --ink-soft:#2A3B54;
+    --paper:#ECE7DB;
+    --paper-raised:#F5F2E8;
+    --gold:#B8873E;
+    --gold-soft:#D8B876;
+    --teal:#3E7069;
+    --line:#C9C0A8;
+    --text:#1B2430;
+    --text-muted:#5B6577;
+    --white:#FEFDFA;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  ::selection{background:var(--gold-soft);color:var(--ink);}
+
+  /* Layout */
+  .app{
+    display:flex;
+    min-height:100vh;
+  }
+
+  /* Sidebar */
+  .sidebar{
+    width:230px;
+    flex-shrink:0;
+    background:var(--ink);
+    color:var(--white);
+    padding:36px 26px;
+    display:flex;
+    flex-direction:column;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{
+    font-family:'Merriweather',serif;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:0.02em;
+    margin-bottom:4px;
+  }
+  .brand-sub{
+    font-size:11.5px;
+    color:#9AA7BC;
+    margin-bottom:44px;
+    line-height:1.5;
+  }
+  nav{display:flex;flex-direction:column;gap:2px;}
+  .nav-link{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 10px;
+    border-radius:3px;
+    color:#C7D0DE;
+    text-decoration:none;
+    font-size:14.5px;
+    cursor:pointer;
+    border-left:2px solid transparent;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .nav-link:hover{background:rgba(255,255,255,0.05);color:var(--white);}
+  .nav-link.active{
+    color:var(--white);
+    border-left:2px solid var(--gold);
+    background:rgba(255,255,255,0.06);
+  }
+  .nav-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:#5A6C88;
+    flex-shrink:0;
+  }
+  .nav-link.active .nav-dot{background:var(--gold);}
+  .sidebar-foot{
+    margin-top:auto;
+    padding-top:24px;
+    border-top:1px solid rgba(255,255,255,0.1);
+    font-size:11px;
+    color:#7C89A0;
+    line-height:1.6;
+  }
+
+  /* Main */
+  main{
+    flex:1;
+    min-width:0;
+    padding:56px 64px 90px;
+  }
+  .page{display:none;animation:rise .5s ease both;}
+  .page.visible{display:block;}
+  @keyframes rise{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .eyebrow{
+    font-size:13px;
+    color:var(--teal);
+    margin-bottom:10px;
+    font-weight:700;
+  }
+  h1.page-title{
+    font-family:'Merriweather',serif;
+    font-size:42px;
+    font-weight:700;
+    margin:0 0 8px;
+    line-height:1.1;
+    color:var(--ink);
+  }
+  .page-sub{
+    color:var(--text-muted);
+    font-size:15.5px;
+    max-width:520px;
+    margin-bottom:44px;
+    line-height:1.6;
+  }
+
+  /* Home hero */
+  .hero{
+    margin-bottom:40px;
+  }
+  .home-name{
+    font-family:'Merriweather',serif;
+    font-size:44px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0 0 14px;
+    line-height:1.1;
+  }
+  .home-tagline{
+    font-family:'Inter',sans-serif;
+    font-size:16.5px;
+    color:var(--text-muted);
+    line-height:1.7;
+    margin:0 0 24px;
+    max-width:560px;
+  }
+
+  .compass{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+  .compass a{
+    font-size:13.5px;
+    color:var(--ink);
+    text-decoration:none;
+    padding:9px 16px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:var(--paper-raised);
+    cursor:pointer;
+    transition:border-color .15s ease, transform .1s ease;
+  }
+  .compass a:hover{border-color:var(--gold);}
+
+  .divider{
+    height:1px;
+    background:var(--line);
+    margin:8px 0 40px;
+  }
+
+  /* Cards / journal-page feel */
+  .card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:32px;
+  }
+
+  /* Prose (static, readable paragraphs) */
+  .prose p{
+    margin:0 0 18px;
+    font-family:'Inter',sans-serif;
+    font-size:15.5px;
+    line-height:1.85;
+    color:var(--text);
+  }
+  .prose p:last-child{margin-bottom:0;}
+  .prose p.prose-head{
+    font-family:'Merriweather',serif;
+    font-size:18px;
+    font-weight:700;
+    color:var(--ink);
+    margin:28px 0 10px;
+  }
+  .prose p.prose-head:first-child{margin-top:0;}
+  .prose strong{color:var(--ink);}
+
+  .exp-prose p{
+    font-size:14.5px;
+    line-height:1.8;
+    margin:0 0 14px;
+    color:var(--text);
+  }
+  .exp-prose p:last-child{margin-bottom:0;}
+
+  /* Gallery / pictures carousel */
+  .carousel{position:relative;max-width:640px;}
+  .carousel-track{
+    position:relative;
+    aspect-ratio:4/3;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:var(--paper-raised);
+    overflow:hidden;
+  }
+  .carousel-slide{
+    position:absolute;inset:0;
+    opacity:0;
+    transition:opacity .6s ease;
+  }
+  .carousel-slide.active{opacity:1;}
+  .carousel-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+  .carousel-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;}
+  .carousel-dots button{
+    width:9px;height:9px;border-radius:50%;
+    border:none;padding:0;cursor:pointer;
+    background:var(--line);
+  }
+  .carousel-dots button.active{background:var(--gold);}
+
+  /* Static photo frame (image lives in the photos/ folder) */
+  .photo-frame{
+    aspect-ratio:4/5;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:var(--paper-raised);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+  }
+  .photo-frame img{
+    width:100%;height:100%;object-fit:cover;position:absolute;inset:0;
+  }
+  /* Shows only if the image file is missing (the broken img gets hidden) */
+  .photo-frame .placeholder{
+    color:var(--text-muted);
+    font-size:13px;
+    padding:20px;
+    line-height:1.6;
+  }
+  .photo-frame .placeholder span{display:block;font-size:26px;margin-bottom:8px;}
+
+  /* About page */
+  .about-grid{
+    display:grid;
+    grid-template-columns:300px 1fr;
+    gap:40px;
+    align-items:start;
+  }
+
+  /* Skills page */
+  .skills-layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:32px;
+  }
+  .section-label{
+    font-family:'Merriweather',serif;
+    font-size:19px;
+    color:var(--ink);
+    margin:0 0 18px;
+    font-weight:700;
+  }
+  .chip-group-label{
+    font-size:12px;
+    color:var(--text-muted);
+    letter-spacing:0.06em;
+    margin:0 0 8px;
+    text-transform:uppercase;
+  }
+  .chip-group-label.spaced{margin-top:18px;}
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip-static{
+    font-size:13.5px;
+    padding:7px 16px;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:16px;
+    color:var(--text);
+  }
+
+  /* Resume (static file in the same folder) */
+  .resume-card{
+    width:100%;
+  }
+  .resume-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 14px;
+    border:1px solid var(--line);
+    border-radius:4px 4px 0 0;
+    background:var(--paper-raised);
+  }
+  .resume-name{
+    font-size:13.5px;
+    color:var(--ink);
+    font-weight:500;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .btn{
+    padding:8px 16px;
+    border-radius:4px;
+    background:var(--teal);
+    color:#fff;
+    text-decoration:none;
+    font-size:13.5px;
+    flex-shrink:0;
+  }
+  .btn:hover{opacity:.85;}
+  .resume-preview{
+    display:block;
+    width:100%;
+    height:500px;
+    border:1px solid var(--line);
+    border-top:none;
+    border-radius:0 0 4px 4px;
+    background:var(--white);
+  }
+
+  /* Global experiences page */
+  .exp-section{margin-bottom:34px;}
+  .exp-section:last-child{margin-bottom:0;}
+  .exp-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .exp-badge{
+    font-size:11px;
+    color:var(--teal);
+    border:1px solid var(--teal);
+    border-radius:10px;
+    padding:2px 10px;
+    letter-spacing:0.02em;
+  }
+  .exp-head h3{
+    font-family:'Merriweather',serif;
+    font-size:19px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0;
+  }
+
+  @media (max-width:860px){
+    .app{flex-direction:column;}
+    .sidebar{width:100%;height:auto;position:relative;flex-direction:row;flex-wrap:wrap;padding:20px 24px;align-items:center;}
+    .brand-sub{display:none;}
+    nav{flex-direction:row;flex-wrap:wrap;margin-left:auto;}
+    .sidebar-foot{display:none;}
+    main{padding:36px 22px 70px;}
+    .about-grid,.skills-layout,.gallery-grid{grid-template-columns:1fr;}
+    h1.page-title{font-size:32px;}
+    .home-name{font-size:34px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .page{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">Portfolio</div>
+    <div class="brand-sub">A working record of who I am,<br>what I can do, and where<br>I've been.</div>
+    <nav>
+      <a class="nav-link active" data-page="home"><span class="nav-dot"></span>Home</a>
+      <a class="nav-link" data-page="about"><span class="nav-dot"></span>About Me</a>
+      <a class="nav-link" data-page="skills"><span class="nav-dot"></span>Skills</a>
+      <a class="nav-link" data-page="global"><span class="nav-dot"></span>Global Experiences</a>
+    </nav>
+    <div class="sidebar-foot">Janelle Whiteside<br>Computer Engineering, University of Florida</div>
+  </aside>
+
+  <main>
+
+    <!-- HOME -->
+    <section class="page visible" id="page-home">
+      <div class="eyebrow">Welcome</div>
+      <div class="hero">
+        <h1 class="home-name">Janelle Whiteside</h1>
+        <p class="home-tagline">Computer Engineer building a career in embedded aerospace systems shaped by an art minor, campus leadership, and six weeks studying engineering and sustainability abroad in Germany.</p>
+        <div class="compass">
+          <a data-page="about">About Me →</a>
+          <a data-page="skills">Skills &amp; Resume →</a>
+          <a data-page="global">Global Experiences →</a>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3 class="section-label" style="margin-bottom:18px;">A Few Pictures</h3>
+            <div class="carousel" id="home-carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide active"><img src="IMG_0007.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_0069.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_0132.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_0910.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_0991.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_1204.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_1368.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_1526.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_1571.jpeg" alt="Janelle Whiteside"></div>
+          <div class="carousel-slide"><img src="IMG_1743.jpeg" alt="Janelle Whiteside"></div>
+        </div>
+        <div class="carousel-dots" id="carousel-dots"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="page" id="page-about">
+      <div class="eyebrow">Page 02</div>
+      <h1 class="page-title">About Me</h1>
+
+      <div class="about-grid">
+        <div>
+          <div class="photo-frame">
+            <div class="placeholder"><span>&#9633;</span>Add photos/about.jpg</div>
+            <img src="about_me.jpeg" alt="Portrait of Janelle Whiteside" onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="card">
+          <div class="prose">
+        <p>Hi! My name is Janelle Whiteside, and I&#x27;m currently a 5th-year at the University of Florida. I will be graduating this Fall with a Bachelor&#x27;s in Computer Engineering and an Art minor. The following Spring, I will be starting as a Software Engineer at Honeywell Aerospace in Clearwater, FL, working with embedded GPS/INS systems in aircrafts. Working with embedded systems is the ideal combination for me as a computer engineer, since I&#x27;m interested in both the software and hardware sides of a system not just how code runs, but how it behaves inside the physical world it&#x27;s built into.</p>
+        <p>At my core, I believe the best engineering happens at intersections between disciplines, between people, and between cultures. That philosophy has shaped almost everything I&#x27;ve chosen to do in college: pairing a technical degree with an art minor, taking on leadership roles that put me in front of people instead of just a screen, and spending six weeks studying engineering and culture abroad in Germany. I don&#x27;t think of my interests as separate boxes to check off. The same curiosity that pulls me toward a hard circuits problem is the one that pulls me toward a pottery wheel or an unfamiliar city I&#x27;ve never had to navigate before.</p>
+        <p>My academic and career goals center on becoming an engineer who can move between software and hardware, and eventually between technical and leadership work. Interning at Honeywell Aerospace confirmed that I want to build a career in embedded systems for aviation, work where a single line of code has to perform reliably inside a physical, safety-critical environment. Longer term, I&#x27;m drawn to the sustainability side of engineering, something my coursework in Germany sharpened, I want to work on systems, aerospace or otherwise, that are designed with their full lifecycle in mind rather than just their immediate function.</p>
+        <p>Outside of coursework, I&#x27;m a maker. Wood and clay are my favorite mediums, and I&#x27;m currently finishing a senior art project built around a decorative coffee table carved with the Gye Nyame symbol, alongside a thrown vase, cups, and plates a body of work about carrying heritage into everyday, lived-in spaces rather than treating it as something to display and never touched. I also enjoy mentoring, which has shown up throughout my time in college: as a Resident Assistant and STEP UP mentor for first-year engineers, and as a teaching assistant for Engineering Design &amp; Society, where I manage a fleet of 3D printers and help students bring their CAD designs into the physical world.</p>
+        <p>Teamwork, technology, global engagement, and continuous self-development are the threads that tie all of this together, and they&#x27;re the lens I try to bring to every project I take on, whether it&#x27;s technical, creative, or something in between.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="page" id="page-skills">
+      <div class="eyebrow">Page 03</div>
+      <!-- <h1 class="page-title">Skills</h1> -->
+
+      <div class="skills-layout">
+        <div>
+          <h3 class="section-label">Skills</h3>
+          <p class="chip-group-label">Proficient</p>
+          <div class="chips">
+            <div class="chip-static">C++</div>
+            <div class="chip-static">Python</div>
+            <div class="chip-static">Java</div>
+          </div>
+          <p class="chip-group-label spaced">Intermediate</p>
+          <div class="chips">
+            <div class="chip-static">VHDL</div>
+            <div class="chip-static">JavaScript</div>
+            <div class="chip-static">C</div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="section-label">Resume</h3>
+          <div class="resume-card">
+            <div class="resume-row">
+              <span class="resume-name"> Janelle Whiteside Resume.pdf</span>
+              <a class="btn" href="Janelle_Whiteside_Resume.pdf" download="Janelle_Whiteside_Resume.pdf">Download</a>
+            </div>
+            <iframe class="resume-preview" src="Janelle_Whiteside_Resume.pdf#toolbar=0" title="Resume preview">
+              <p>Preview unavailable. <a href="Janelle_Whiteside_Resume.pdf">Open the PDF</a>.</p>
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider" style="margin-top:50px;"></div>
+
+      <div class="eyebrow">NACE Career Readiness Competencies</div>
+      <h3 class="section-label" style="font-size:24px;margin-bottom:6px;">Employer-Valued Competencies</h3>
+      <p class="page-sub" style="margin-bottom:28px;">Four competencies the National Association of Colleges and Employers (NACE) identifies as key to career readiness.</p>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Teamwork</span><h3>Teamwork</h3></div>
+        <div class="exp-prose">
+        <p> As Vice President of Social Affairs for Phi Sigma Rho, the sorority for women in engineering, I was responsible for the chapter&#x27;s entire social calendar over two yearssisterhood events, cross-organization mixers, and major chapter-wide gatherings. I needed to plan and run more than 50 events per semester, manage a committee of four appointed officers, and keep every event compliant with university, Greek, and national Risk Management policies. I built a shared event calendar and budget-tracking system with the VP of Finance, delegated ownership of recurring event types to specific officers, and ran regular check-ins to catch logistical problems before event day. I also handled the paperwork and training attendance that kept every event within risk-management guidelines. The chapter ran a full, policy-compliant social calendar for two consecutive years without a drop in event quality, officer turnover didn&#x27;t disrupt the system, and chapter engagement and morale measurably improved.</p>
+        </div>
+      </div>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Technology</span><h3>Technology</h3></div>
+        <div class="exp-prose">
+        <p> During my summer at Honeywell Aerospace, I joined a team supporting a legacy avionics flight systems program that depended on a decades-old engine documentation workflow built in Fortran. I was asked to modernize that documentation tool and, separately, to help update embedded Ada code in a safety-critical system by removing obsolete legacy components. I redesigned the documentation tool as a modular Python system, worked through the embedded codebase closely enough to make targeted Ada modifications, and created and executed a formal test plan to confirm the embedded changes preserved functional correctness. I tracked all of it through Jira and Bitbucket alongside the rest of my team. The new Python tool significantly improved processing speed, maintainability, and usability for the engineers using it after me, and the embedded baseline I helped establish passed verification cleanly real experience working inside the rigorous, safety-critical process that embedded aerospace software demands.</p>
+        </div>
+      </div>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Global</span><h3>Global &amp; Cultural Engagement</h3></div>
+        <div class="exp-prose">
+        <p> With an art minor alongside my engineering degree, and fresh off six weeks on an engineering-and-culture study abroad program in Germany, I wanted my senior capstone to bring those two sides of my education together instead of keeping them separate. My task was to design a senior ceramics and woodworking project, plus a related trompe l&#x27;oeil ceramic sculpture assignment, that said something real about identity rather than just demonstrating technical skill. I&#x27;m building a decorative coffee table with the Gye Nyame Akan symbol carved into the top, using two tones to separate the symbol from the negative space and a base made of two intertwined spiral legs, alongside a thrown vase, cups, and plates. The concept is about carrying heritage into everyday spaces without it feeling like a souvenir something that could sit on anyone&#x27;s coffee table and actually get used. In parallel, I&#x27;m working on a trompe l&#x27;oeil sculpture that fuses two everyday, nature-based objects into one functional, impossible hybrid. The project has pushed me to treat cultural material with the same precision I&#x27;d bring to an engineering design, and it&#x27;s become the piece of my portfolio I&#x27;m proudest to explain to people who assume &quot;computer engineer&quot; and &quot;artist&quot; don&#x27;t belong in the same sentence.</p>
+        </div>
+      </div>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Self-Development</span><h3>Career &amp; Self-Development</h3></div>
+        <div class="exp-prose">
+        <p> During my study abroad program in Germany, one full coursework unit was dedicated to the environmental side of engineering plastic recycling systems, renewable energy, and sustainable materials, paired with site visits like a steel mill and the Energy Parc Saerbeck. I set out to actually understand, rather than just acknowledge, where current engineering practice falls short environmentally, and to think about where I personally wanted to stand on that going forward. I worked through questions comparing mechanical versus chemical plastic recycling, the real-world practicality of biopolymers like PLA and PHA, recycling-optimized product design, and the economic barriers to non-fossil aircraft propulsion and renewable car fuels directly relevant given where my career is headed. I also compared U.S. and European approaches to waste separation, which surfaced infrastructure gaps in American systems I&#x27;d never thought to question before. That coursework reshaped how I think about my own career goals. I now actively look for the sustainability angle in engineering problems I&#x27;m handed, including in aerospace, and I plan to keep seeking out projects and continued learning that push the environmental side of engineering rather than treat it as someone else&#x27;s job.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GLOBAL EXPERIENCES -->
+    <section class="page" id="page-global">
+      <div class="eyebrow">Page 04</div>
+      <h1 class="page-title">Global Experiences</h1>
+      <p class="page-sub">A record of the ways I've engaged with the world on campus, in language, in coursework and what it's added up to.</p>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Campus</span><h3>Global Campus Activities</h3></div>
+        <div class="exp-prose">
+        <p>My clearest global engagement on campus came through modeling rather than coursework. I participated in the African Student Union's annual showcase, walking as a model in African fashion show, an event built around celebrating the continent's design traditions in front of the whole campus community rather than just discussing them in a classroom. Being on that stage, wearing pieces rooted in traditions I'd otherwise only studied from a distance, connected directly to the same interest in heritage that shows up in my senior art project, where I'm carving the Gye Nyame symbol into a coffee table to bring Akan heritage into an everyday space. </p>
+        <p>I also took part in Afrofuturism Week, walking in its fashion show as part of the Regal and Royal section, a segment built around styling that reimagines African royalty through a futuristic lens, blending historical reference with forward-looking design. Where the ASU showcase celebrated existing African fashion traditions, Afrofuturism Week pushed further into imagination: asking what African identity and aesthetics look like reinterpreted for an imagined future rather than only preserved from the past. Walking in a segment built specifically around regality gave me a different kind of presence to carry than everyday modeling, it asked me to hold myself like the royalty the designs were referencing, which was its own small lesson in confidence and performance. Both experiences put me in direct, physical conversation with a part of global and diasporic culture that I don't get to engage with through engineering coursework at all. They've also fed back into my art practice: thinking about how clothing and craft carry heritage forward is close to the same question I'm asking with ceramics and wood, just worked out on a runway instead of a pottery wheel.</p>
+        </div>
+      </div>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Abroad</span><h3>Study Abroad &amp; International Experience</h3></div>
+        <div class="exp-prose">
+        <p>For six weeks, I took part in an engineering-and-culture study abroad program in Germany that paired unit-based technical coursework, plastic recycling and biopolymers, renewable energy, materials science, e-mobility, and agricultural technology with a &quot;Living Society Module&quot; of cultural study trips to Berlin, the Rhein/Ruhr industrial region, and the North Sea coast.</p>
+        <p>Germany surprised me in small, specific ways almost immediately. The public transit system was more reliable than anything I&#x27;m used to at home, where buses only run well near campus because the university subsidizes them rather than the city. Groceries, transportation, nearly everything cost noticeably less than in the U.S., and the professors, graduate students, and strangers I met were far friendlier and more talkative than the stereotypes I&#x27;d absorbed beforehand.</p>
+        <p>What I enjoyed most was Landscape Park Duisburg Nord, a former industrial site in the Ruhr area turned into an open public park. Climbing the old industrial monuments with no restricted areas or supervision felt like one enormous open-air playground. We signed our names in marker next to the graffiti already covering the structures, watched the sunset turn the skyline gold from the top of a former blast furnace, and came back again after dark to see the whole park lit up differently. I&#x27;d go back just to see if our names are still there.</p>
+        <p>The trip also pushed me somewhere heavier. At the &quot;Palace of Tears&quot; in Berlin, I learned about a seventeen-year-old shot trying to cross from East to West close enough that American soldiers could see him bleeding out but too far to intervene without starting an international incident, so both sides just watched. Sitting with a story like that, so far outside anything in my own life, was its own kind of discomfort, and it changed how I approached the rest of the trip&#x27;s heavier historical sites, including the Berlin Wall itself: standing there, I mostly felt how much the wounds of that history have healed, even while the history stays impossible to forget.</p>
+        <p>More than anything, the trip taught me that I can drop into an unfamiliar country, an unfamiliar technical curriculum, and an unfamiliar culture all at once and still find my footing quickly and that sitting with something uncomfortable, like the stories at the Palace of Tears, is its own kind of growth, not just the fun parts like climbing an old blast furnace at sunset.</p>
+        </div>
+      </div>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Language</span><h3>Language Learning</h3></div>
+        <div class="exp-prose">
+        <p>My language experience with German started small and stayed small on purpose I worked through a bit of German on Duolingo before the trip, nowhere near conversational, just enough to recognize basic words and phrases and not walk in completely blind. Once we arrived, the program offered beginner German classes alongside the technical coursework, which I took, so my actual learning happened less from self-study and more from that structured beginner track combined with just being surrounded by the language day to day.</p>
+        <p>More than once, I found I could actually communicate with the little German I had ordering food, following basic directions, picking up enough from a conversation to follow along, which surprised me more than almost anything else on the trip. I hadn&#x27;t expected a Duolingo streak and one beginner class to carry me that far.</p>
+        <p>The biggest challenge was that I&#x27;d expected to need German far more than I did. Between the beginner classes and the fact that plenty of people spoke English almost everywhere we went, I never got pushed into the kind of high-stakes, sink-or-swim German conversations I&#x27;d half-prepared myself for. That was its own lesson: my actual challenge wasn&#x27;t surviving in German, it was staying motivated to practice a language I technically didn&#x27;t need in the moment, which is a very different skill than pushing through fear of making mistakes. It left me with a clearer sense that if I want real fluency, it has to come from choosing to keep learning past the point of necessity, not from being forced into it by circumstance.</p>
+        </div>
+      </div>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge">Coursework</span><h3>International Coursework</h3></div>
+        <div class="exp-prose">
+        <p>My international coursework centered on five applied units I worked through during my study abroad program in Germany, each built around a real engineering and policy question rather than a textbook chapter. In materials, I explored how to extend the service life of structural metals, through material selection, non-destructive testing like ultrasonic and radiographic inspection, and cathodic protection (sacrificial anode and impressed current) grounded in a visit to a steel mill where I watched chromium alloying and recycled stainless steel in production, and I worked through why hydrogen embrittlement is so hard to study: hydrogen atoms are small and mobile enough to be nearly impossible to track and quantify, and at high temperatures hydrogen can even react with carbides in steel to form methane, weakening it from the inside.</p>
+        <p>In energy, I compared solar and wind as the renewable sources best positioned for large-scale adoption, calculated my own apartment&#x27;s yearly electricity consumption (around 15,300 kWh, split across four roommates and dominated almost entirely by an AC unit that barely turns off in Florida), and worked out how much solar panel surface area it would actually take to power my place on renewables alone. In plastics, I compared mechanical and chemical recycling, biopolymers like PLA and PHA, and recycling-optimized design, and compared American and European waste separation systems directly, in Germany, the pfand deposit system means you get money back for returning bottles, which I used firsthand during Maiwoche, and which does double duty as an informal income source for people experiencing homelessness. In e-mobility, I worked through the core technologies autonomous vehicles need to replace human senses and judgment, including the genuinely uncomfortable ethical question of who&#x27;s responsible when an AI has to make a split-second, no-good-option decision. And in agriculture, I looked at where sensor-based and autonomous field equipment breaks down in real-world conditions, mud, dust, inconsistent lighting, versus in a controlled lab setting.</p>
+        <p>What drew me to this coursework was the chance to study engineering sustainability somewhere with a genuinely different infrastructure than the U.S. Comparing the two systems pfand versus HOA-dependent recycling pickup, or Germany&#x27;s reliance on waste-to-energy incineration versus America&#x27;s landfills, made visible how much of what I&#x27;d assumed was a technical limitation back home is actually a policy and infrastructure choice. That&#x27;s the biggest way the course expanded my worldview: it&#x27;s harder now for me to treat a system as &quot;just how things are&quot; instead of &quot;a choice someone made that could be made differently.&quot;</p>
+        <p>This connects directly to my degree and career path. I&#x27;m starting as a software engineer at Honeywell Aerospace working on embedded GPS/INS systems, and the aircraft propulsion economics I studied in Germany the weight and disposal problems of lithium batteries, the cost and ethics of biofuel production, gave me a far more technical picture of why aviation is one of the hardest sectors to decarbonize, which is exactly the kind of constraint I want to keep in view as I build a career there. The assignment I&#x27;m proudest of is still the hydrogen embrittlement question, where I had to reason through a genuinely unsettled research problem using what I&#x27;d seen firsthand at the steel mill rather than just citing a textbook explanation.</p>
+        </div>
+      </div>
+
+      <div class="exp-section">
+        <div class="exp-head"><span class="exp-badge" style="color:var(--gold);border-color:var(--gold);">Reflection</span><h3>Final Reflection</h3></div>
+        <div class="exp-prose">
+        <p class="prose-head">Cultural Understanding and World View</p>
+        <p>Six weeks in Germany gave me a genuinely different knowledge base about another culture not the postcard version, but the working one. I noticed it almost immediately: German public transit was more reliable than anything I&#x27;m used to at home, where buses only run well near campus because the university subsidizes them rather than the city. Groceries and everyday costs were noticeably lower, and the professors, graduate students, and strangers I met were far friendlier and more talkative than the stereotypes I&#x27;d absorbed beforehand. Small systems like the pfand bottle deposit getting a euro back for returning a glass during Maiwoche, a system that also lets people experiencing homelessness earn money by collecting bottles showed me how a policy choice can quietly double as a social safety net. That shift in knowledge turned into a real shift in interest: I came home paying closer attention to the political and economic decisions behind systems I&#x27;d always taken for granted, from how Germany treats recycling as infrastructure rather than individual willpower to why a site like Energy Parc Saerbeck gets government investment at all. Transnational issues like plastic recycling, renewable energy adoption, and aviation decarbonization stopped being abstract case studies and became things I can talk about with real technical grounding. I won&#x27;t claim this trip handed me fluent German or a fully formed political identity if anything, I learned how much I&#x27;d assumed about both going in but it gave me a sharper, less American-centric lens for looking at engineering and policy together.</p>
+        <p class="prose-head">Personal Growth and Values</p>
+        <p>The personal growth from this trip showed up in both the light moments and the heavy ones. Climbing through Landscape Park Duisburg Nord with no restricted areas or supervision signing my name in marker next to decades of other visitors&#x27; graffiti, going back after dark to see the whole park lit up differently, gave me a kind of independence and initiative I don&#x27;t get much practice with in a structured academic schedule. Learning, at the Palace of Tears, about a seventeen-year-old shot trying to cross from East to West Berlin, close enough that American soldiers watched him bleed out without being able to help, pushed me somewhere much less comfortable, and sitting with a story like that, so far outside anything in my own life, stretched my capacity for empathy in a way the lighter parts of the trip didn&#x27;t. Standing at the Berlin Wall itself afterward, I felt how much the wounds of that history have healed even as the history stays impossible to forget, which gave me a clearer sense of my own values around memory and repair. I came back more confident navigating new situations, more comfortable accepting that a culture won&#x27;t behave the way I imagined, and with a better understanding of my own strengths: I adapt fast, I ask good technical questions, and I&#x27;d rather sit with something uncomfortable and learn from it than stay comfortable and miss it.</p>
+        <p class="prose-head">Professional &amp; Career Development</p>
+        <p>Professionally, this experience did real work in clarifying rather than just broadening my goals. Before the trip, I knew I wanted to work in embedded systems; after working through the e-mobility, materials, and energy units, calculating my own apartment&#x27;s electricity use, reasoning through hydrogen embrittlement in steel, watching a steel mill actually alloy and shape recycled stainless steel I have a far more specific sense of what I want that career to look like. Starting at Honeywell Aerospace on embedded GPS/INS systems feels less like a job I landed and more like a direction I chose with better information, including a real appreciation for why sustainable engineering in aviation is such a hard, interesting problem: the battery weight and lithium disposal issues, the cost and ethics of biofuel production, the sheer difficulty of decarbonizing something that has to fly. The trip also sharpened how I think about organizational and national culture: watching German engineers and technicians move through a steel mill, and comparing how differently the U.S. and Europe structure something as basic as waste infrastructure or energy policy, made me more attentive to the fact that &quot;how things are done&quot; varies by organization and by country, not just by technical constraint. That awareness, paired with six weeks of adapting to unfamiliar routines, an unfamiliar language, and unfamiliar coursework on short notice, has left me more willing to take on roles and tasks I&#x27;m not already comfortable with which is exactly the posture I want to carry into a first job where I&#x27;ll be learning a new system, a new team, and a new set of constraints all at once.</p>
+        <p>Taken together, these six weeks didn&#x27;t just add a line to my resume they gave me a clearer notion of what I want to do with my life and the kind of engineer I want to become: someone who treats sustainability, culture, and technical skill as connected rather than competing priorities, and who&#x27;s willing to stay uncomfortable long enough to actually learn something.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+
+
+
+<script>
+(function(){
+  // ---- Page navigation ----
+  const navLinks = document.querySelectorAll('.nav-link, .compass a');
+  const pages = document.querySelectorAll('.page');
+
+  function showPage(name){
+    pages.forEach(p => p.classList.toggle('visible', p.id === 'page-' + name));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === name));
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(link.dataset.page);
+    });
+  });
+})();
+
+  // ---- Home carousel ----
+  (function(){
+    const carousel = document.getElementById('home-carousel');
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const dotsWrap = document.getElementById('carousel-dots');
+    const INTERVAL = 3000; // milliseconds between pictures
+    let current = 0, timer = null;
+    const dots = [];
+
+    slides.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Show picture ' + (i + 1));
+      b.addEventListener('click', () => { show(i); start(); });
+      dotsWrap.appendChild(b);
+      dots.push(b);
+    });
+
+    function show(i){
+      current = (i + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle('active', idx === current));
+      dots.forEach((d, idx) => d.classList.toggle('active', idx === current));
+    }
+    function start(){
+      clearInterval(timer);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      timer = setInterval(() => show(current + 1), INTERVAL);
+    }
+
+    show(0);
+    start();
+  })();
+</script>
+
+</body>
+</html> 
