@@ -1,9 +1,6 @@
 
-global experiences: 
-for the global campus experiences can you write about my time in ASU (African student Union) when I partipated in their annual showcase as a model wearing african fashions  and another program where I partciaped Afrofuturism week and walked in their fashion show and walked for the regal and royal section of the show
-
 about me: 
-can  change the photos on the home page pictures with a timed carousel of about 3 seconds  
+add arrows so the user can 
 
 fix the resume section (there is an error with the uploading process)
 
